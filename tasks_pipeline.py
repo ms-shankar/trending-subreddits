@@ -10,12 +10,13 @@ import luigi.contrib.postgres
 import configparser
 import logging
 
-from app.utils.constants import INGESTION_TASKS_STATUS_PATH, SUBREDDIT_CONTENTS_SAVE_DIR, CONFIG_PATH
+from app.utils.constants import SUBREDDIT_CONTENTS_SAVE_DIR, CONFIG_PATH
 from app.helpers.prepare_ingestion import PrepareIngestion
 from app.helpers.subreddit_ingestion import SubredditIngestion
 from app.helpers.rank_subreddits import SubredditsRanking
 from app.helpers.ranking_storage import RankingStorage
-from app.utils.helper import derive_subreddits_list_save_path, derive_subreddits_rank_save_path, derive_current_timestamp, derive_db_config_value, create_dir
+from app.utils.helper import derive_subreddits_list_save_path, derive_subreddits_rank_save_path, \
+    derive_current_timestamp, create_dir, derive_home_dir
 
 from app.helpers.postgres_target import PostgresTarget, MultiReplacer
 
@@ -56,12 +57,13 @@ class GetAllSubreddits(luigi.Task):
     top_n_subreddits = luigi.IntParameter(default=3)
     top_n_posts = luigi.IntParameter(default=3)
     top_n_comments = luigi.IntParameter(default=3)
+    home_dir = luigi.Parameter(default=derive_home_dir())
 
     def requires(self):
         return None
 
     def output(self):
-        subreddits_list_save_file_path = derive_subreddits_list_save_path(self.start)
+        subreddits_list_save_file_path = derive_subreddits_list_save_path(self.start, self.home_dir)
         return luigi.LocalTarget(subreddits_list_save_file_path)
 
     def run(self):
@@ -233,6 +235,7 @@ class PipelineWrappertask(luigi.WrapperTask):
     top_n_subreddits = luigi.IntParameter(default=3)
     top_n_posts = luigi.IntParameter(default=3)
     top_n_comments = luigi.IntParameter(default=3)
+    home_dir = luigi.Parameter(default=derive_home_dir())
 
     def run(self):
         self.output().done()
@@ -250,7 +253,8 @@ class PipelineWrappertask(luigi.WrapperTask):
         yield GetAllSubreddits(start=self.start,
                                top_n_subreddits=self.top_n_subreddits,
                                top_n_posts=self.top_n_posts,
-                               top_n_comments=self.top_n_comments)
+                               top_n_comments=self.top_n_comments,
+                               home_dir=self.home_dir)
 
         yield Ingestion(start=self.start,
                         top_n_subreddits=self.top_n_subreddits,

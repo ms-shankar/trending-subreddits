@@ -23,9 +23,9 @@ def derive_subreddits_rank_save_path(start_date):
     return os.path.join(SUBREDDIT_CONTENTS_SAVE_DIR, f"{start_date}", 'data')
 
 
-def derive_subreddits_list_save_path(timestamp_str):
-    filename = f"ListOfSubreddits_{timestamp_str}.txt"
-    return os.path.join(HOME_DIR, filename)
+def derive_subreddits_list_save_path(start_date, home_dir):
+    filename = f"ListOfSubreddits_{start_date}.txt"
+    return os.path.join(home_dir, 'datalake', start_date, filename)
 
 
 def derive_db_config_value(param):
@@ -38,6 +38,10 @@ def derive_db_config_value(param):
 def create_dir(path):
     if not os.path.exists(path):
         os.mkdir(path)
+
+
+def derive_home_dir():
+    return HOME_DIR
 
 
 
