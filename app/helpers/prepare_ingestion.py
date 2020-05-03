@@ -6,7 +6,10 @@ from app.utils.constants import ALL_SUBREDDITS_URL
 
 
 class PrepareIngestion:
+    """
+    A helper class for the primary task GetAllSubreddits, that performs all task specific operations
 
+    """
     def __init__(self):
         self.url = ALL_SUBREDDITS_URL
         self.contents = None

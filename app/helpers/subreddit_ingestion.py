@@ -14,7 +14,10 @@ class Post:
 
 
 class SubredditIngestion:
+    """
+    A helper class for the secondary task IngestSubreddit, that performs all task specific operations
 
+    """
     def __init__(self, subreddit_name, start, top_n_subreddits, top_n_posts, top_n_comments):
         self.subreddit_name = subreddit_name
         self.start = start

@@ -1,5 +1,7 @@
-# run with a custom --n
-# python run_luigi.py SquaredNumbers --local-scheduler --n 20
+# default run:
+# PYTHONPATH='.' luigi --module tasks_pipeline --local-scheduler PipelineWrappertask
+# custom run:
+# PYTHONPATH='.' luigi --module tasks_pipeline --local-scheduler PipelineWrappertask(<-configurable params passed->))
 
 import luigi
 from luigi.contrib.simulate import RunAnywayTarget
@@ -18,40 +20,16 @@ from app.helpers.ranking_storage import RankingStorage
 from app.utils.helper import derive_subreddits_list_save_path, derive_subreddits_rank_save_path, \
     derive_current_timestamp, create_dir, derive_home_dir
 
-from app.helpers.postgres_target import PostgresTarget, MultiReplacer
-
 logger = logging.getLogger('luigi-interface')
-
-try:
-    import psycopg2
-    import psycopg2.errorcodes
-    import psycopg2.extensions
-except ImportError:
-    logger.warning\
-        ("Loading postgres module without psycopg2 installed. Will crash at runtime if postgres functionality is used.")
 
 config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
 
 
-# # Configuration class for postgres task
-# class PostgresTable(luigi.Config):
-#     # Obtain connection details from config file
-#     config = configparser.ConfigParser()
-#     config.read(CONFIG_PATH)
-#     print("config_sections", config.sections())
-#     print("config_path", CONFIG_PATH)
-#
-#     host = config['POSTGRES']['host']
-#     password = config['POSTGRES']['password']
-#     database = config['POSTGRES']['database']
-#     user = config['POSTGRES']['user']
-#     table = config['POSTGRES']['table']
-
-
 class GetAllSubreddits(luigi.Task):
     """
     Gets the latest list of available subreddits from r/ListOfSubreddits
+
     """
     start = luigi.Parameter(default=derive_current_timestamp())
     top_n_subreddits = luigi.IntParameter(default=3)
@@ -79,6 +57,7 @@ class GetAllSubreddits(luigi.Task):
 class Ingestion(luigi.Task):
     """
     Ingest the reddit data for each subreddit and each post within that subreddit
+
     """
     start = luigi.Parameter(default=derive_current_timestamp())
     top_n_subreddits = luigi.IntParameter(default=3)
@@ -101,11 +80,6 @@ class Ingestion(luigi.Task):
     def run(self):
         # Running the ingestion pipeline to store reddit data for all subreddits and posts
         outputs = []
-
-        # Create directory for the current run
-        # data_lake_dir = os.path.join(self.home_dir, "datalake")
-        # save_dir_path = os.path.join(data_lake_dir, str(self.start))
-        # data_dir_path = os.path.join(save_dir_path, 'data')
 
         create_dir(self.data_lake_dir)
         create_dir(self.save_dir_path)
@@ -142,6 +116,7 @@ class Ingestion(luigi.Task):
 class IngestSubreddit(luigi.Task):
     """
     Task to individually ingest the Subreddit data and store as separate output targets based on save_path param
+
     """
     subreddit_name = luigi.Parameter()
     start = luigi.Parameter(default=derive_current_timestamp())
@@ -173,6 +148,7 @@ class IngestSubreddit(luigi.Task):
 class RankSubreddits(luigi.Task):
     """
     Get the ranking of all subreddits based on subreddit score
+
     """
     start = luigi.Parameter(default=derive_current_timestamp())
     top_n_subreddits = luigi.IntParameter(default=3)
@@ -196,8 +172,6 @@ class RankSubreddits(luigi.Task):
         ranking.get_ranking_index()
 
         # # Save subreddit data into a subreddit specific file
-        # with open(self.output().path, "w") as output_file:
-        #     json.dump(ranking.sorted_ranking_index, output_file)
         ranking_data_list = ranking.get_ranking_data()
 
         # Save sorted_ranking_index data into a subreddits rankings file
@@ -241,6 +215,11 @@ class StoreRankings(luigi.Task):
 
 
 class PipelineWrappertask(luigi.WrapperTask):
+    """
+    A wrapper tasks that runs the entire pipeline in a specific order
+    :params: Custom parameters can be passed for task start timestamp, top 'n' subreddits, posts and comments if necessary.
+
+    """
     start = luigi.Parameter(default=derive_current_timestamp())
     top_n_subreddits = luigi.IntParameter(default=3)
     top_n_posts = luigi.IntParameter(default=3)

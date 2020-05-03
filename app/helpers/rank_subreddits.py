@@ -7,6 +7,10 @@ from app.utils.constants import SUBREDDIT_CONTENTS_SAVE_DIR
 
 
 class SubredditsRanking:
+    """
+    A helper class for the primary task RankSubreddits, that performs all task specific operations
+
+    """
 
     def __init__(self, start_date, dir_path):
         self.start_date = start_date

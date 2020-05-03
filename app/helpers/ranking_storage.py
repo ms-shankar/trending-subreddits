@@ -6,7 +6,10 @@ from app.utils.helper import derive_db_config_value
 
 
 class RankingStorage:
+    """
+    A helper class for the primary task StoreRankings, that performs all task specific operations
 
+    """
     def __init__(self):
         # self.rankings_csv = os.path.join(SUBREDDIT_CONTENTS_SAVE_DIR, f"{start_date}", "SubredditsRanking.csv")
         self.host = derive_db_config_value('host')
