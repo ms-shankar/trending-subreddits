@@ -21,12 +21,8 @@ class SubredditsRanking:
     def get_ranking_index(self):
 
         all_files = os.path.join(self.dir_path, f"*")
-        print("all_files", all_files)
-        print("dir_path", self.dir_path)
         saved_files_list = glob.glob(all_files)
-        print("saved_files_list", saved_files_list)
         for subreddit_file in saved_files_list:
-            print("subreddit_file", subreddit_file)
             with open(subreddit_file, "r") as input_file:
                 subreddit_data = json.load(input_file)
 

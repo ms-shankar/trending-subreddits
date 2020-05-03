@@ -1,4 +1,4 @@
-from app.utils.constants import ALL_SUBREDDITS_URL, SUBREDDIT_CONTENTS_SAVE_DIR, CONFIG_PATH
+from app.utils.constants import CONFIG_PATH
 import praw
 from dataclasses import dataclass
 import configparser
@@ -60,7 +60,6 @@ class SubredditIngestion:
             submission = self.reddit.submission(id=post_object.post_id)
             submission.comments.replace_more(limit=None)
             for top_level_comment in submission.comments.list():
-                # print(top_level_comment.body)
 
                 # Increment the number of comments counter for each post
                 post_object.total_comments += 1
