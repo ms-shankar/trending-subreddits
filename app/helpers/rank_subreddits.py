@@ -21,13 +21,18 @@ class SubredditsRanking:
     def get_ranking_index(self):
 
         all_files = os.path.join(self.dir_path, f"*")
+        print("all_files", all_files)
+        print("dir_path", self.dir_path)
         saved_files_list = glob.glob(all_files)
+        print("saved_files_list", saved_files_list)
         for subreddit_file in saved_files_list:
-            subreddit_data = json.load(open(subreddit_file, "r"))
+            print("subreddit_file", subreddit_file)
+            with open(subreddit_file, "r") as input_file:
+                subreddit_data = json.load(input_file)
 
-            # Populate unordered ranking index dict with type {subreddit_name: subreddit_score}
-            update_item = {subreddit_data['subreddit']: subreddit_data['subreddit_score']}
-            self.unsorted_ranking_index.update(update_item)
+                # Populate unordered ranking index dict with type {subreddit_name: subreddit_score}
+                update_item = {subreddit_data['subreddit']: subreddit_data['subreddit_score']}
+                self.unsorted_ranking_index.update(update_item)
 
         # Create sorted ranking index by sorting unordered ranking index by dict values (subreddit_score)
         # in decreasing order to obtain best to worst rankings
