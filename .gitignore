@@ -3,12 +3,16 @@
 *.swp
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
-app/__pycache__/
-app/helpers/__pycache__/*.pyc
 *.pyc
 app/*.pyc
 *.py[cod]
+
+__pycache__/
+app/__pycache__/
+app/helpers/__pycache__/*.pyc
+app/utils/__pycache__/constants.cpython-37.pyc
+app/utils/__pycache__/*.pyc
+
 *$py.class
 s
 # C extensions
