@@ -4,8 +4,6 @@ HOME_DIR = os.getcwd().split('/app/utils')[0]
 
 ALL_SUBREDDITS_URL = "https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits.json"
 
-# ALL_SUBREDDITS_LIST_SAVE_PATH = os.path.join(HOME_DIR, "ListOfSubreddits.txt")
-
 SUBREDDIT_CONTENTS_SAVE_DIR = os.path.join(HOME_DIR, "datalake")
 
 INGESTION_TASKS_STATUS_PATH = os.path.join(HOME_DIR, "ingestion_status.txt")

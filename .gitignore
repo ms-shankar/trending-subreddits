@@ -5,7 +5,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 app/__pycache__/
-app/helpers/__pycache__/
+app/helpers/__pycache__/*.pyc
 *.pyc
 app/*.pyc
 *.py[cod]

@@ -21,7 +21,6 @@ class TestPrepareIngestion(unittest.TestCase):
 
         # Act
         result = prepare.extract_subreddit_names(input_string)
-        print("result", result)
 
         # Assert
         self.assertEqual(result, expected_result)
