@@ -84,9 +84,18 @@ class Ingestion(luigi.Task):
     top_n_subreddits = luigi.IntParameter(default=3)
     top_n_posts = luigi.IntParameter(default=3)
     top_n_comments = luigi.IntParameter(default=3)
+    home_dir = luigi.Parameter(default=derive_home_dir())
+    data_lake_dir = luigi.Parameter(default=None)
+    save_dir_path = luigi.Parameter(default=None)
+    data_dir_path = luigi.Parameter(default=None)
 
     def output(self):
-        output_path = os.path.join(SUBREDDIT_CONTENTS_SAVE_DIR, "Ingestion_status.txt")
+        # Create directory for the current run
+        self.data_lake_dir = os.path.join(self.home_dir, "datalake")
+        self.save_dir_path = os.path.join(self.data_lake_dir, str(self.start))
+        self.data_dir_path = os.path.join(self.save_dir_path, 'data')
+
+        output_path = os.path.join(self.save_dir_path, "Ingestion_status.txt")
         return luigi.LocalTarget(output_path)
 
     def run(self):
@@ -94,15 +103,14 @@ class Ingestion(luigi.Task):
         outputs = []
 
         # Create directory for the current run
-        save_dir_path = os.path.join(SUBREDDIT_CONTENTS_SAVE_DIR, str(self.start))
-        data_dir_path = os.path.join(save_dir_path, 'data')
+        # data_lake_dir = os.path.join(self.home_dir, "datalake")
+        # save_dir_path = os.path.join(data_lake_dir, str(self.start))
+        # data_dir_path = os.path.join(save_dir_path, 'data')
 
-        create_dir(save_dir_path)
-        create_dir(data_dir_path)
+        create_dir(self.data_lake_dir)
+        create_dir(self.save_dir_path)
+        create_dir(self.data_dir_path)
 
-        # TODO Testing remove uncomment below
-        # subreddits_list_save_file_path = derive_subreddits_list_save_path(self.start)
-        # with open(subreddits_list_save_file_path, 'r') as list_file:
         for input in self.input():
             with input.open('r') as list_file:
                 subreddits = list_file.readlines()
@@ -114,7 +122,8 @@ class Ingestion(luigi.Task):
                                                            start=self.start,
                                                            top_n_subreddits=self.top_n_subreddits,
                                                            top_n_posts=self.top_n_posts,
-                                                           top_n_comments=self.top_n_comments
+                                                           top_n_comments=self.top_n_comments,
+                                                           data_dir_path=self.data_dir_path
                                                            )
 
                     outputs.append(subreddit_ingestions.output().path)
@@ -139,6 +148,7 @@ class IngestSubreddit(luigi.Task):
     top_n_subreddits = luigi.IntParameter(default=3)
     top_n_posts = luigi.IntParameter(default=3)
     top_n_comments = luigi.IntParameter(default=3)
+    data_dir_path = luigi.Parameter()
 
     def run(self):
         # Instantiate the subreddit ingestion object
@@ -156,7 +166,7 @@ class IngestSubreddit(luigi.Task):
 
     def output(self):
         # derive the save paths for each subreddit
-        subreddit_save_path = os.path.join(SUBREDDIT_CONTENTS_SAVE_DIR, f"{str(self.start)}", f"data", f"{self.subreddit_name}.json")
+        subreddit_save_path = os.path.join(self.data_dir_path, f"{self.subreddit_name}.json")
         return luigi.LocalTarget(subreddit_save_path)
 
 
@@ -259,7 +269,8 @@ class PipelineWrappertask(luigi.WrapperTask):
         yield Ingestion(start=self.start,
                         top_n_subreddits=self.top_n_subreddits,
                         top_n_posts=self.top_n_posts,
-                        top_n_comments=self.top_n_comments)
+                        top_n_comments=self.top_n_comments,
+                        home_dir=self.home_dir)
 
         yield RankSubreddits(start=self.start,
                              top_n_subreddits=self.top_n_subreddits,

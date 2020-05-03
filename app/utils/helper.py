@@ -44,6 +44,11 @@ def derive_home_dir():
     return HOME_DIR
 
 
+def derive_data_lake_dir():
+    os.path.join(HOME_DIR, "datalake")
+
+
+
 
 
 
