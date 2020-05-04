@@ -1,5 +1,6 @@
 import json
-from app.utils.constants import ALL_SUBREDDITS_URL
+import urllib
+from app.utils.constants import ALL_SUBREDDITS_URL, ALL_SUBREDDITS_JSON, MINIMAL_SUBREDDITS_JSON
 
 
 class PrepareIngestion:
@@ -16,14 +17,17 @@ class PrepareIngestion:
         Fetches response containing all subreddits names from subreddit r/ListOfSubreddits
         :return A list containing all subreddit names
         """
-        # req = urllib.request.Request(self.url)
-        # response = urllib.request.urlopen(req)
-        # data = response.read()
-        # self.contents = json.loads(data)
-
-        # The following needs to be removed and the above needs to be uncommented
-        with open('/Users/s.sathyakumari/Downloads/projects/pipeline-projects/trending-subreddits/listofsubreddits.json', 'r') as f:
-            self.contents = json.load(f)
+        try:
+            req = urllib.request.Request(self.url)
+            response = urllib.request.urlopen(req)
+            data = response.read()
+            self.contents = json.loads(data)
+        # Handle HTTP Error 429: Too Many Requests
+        except urllib.error.HTTPError:
+            # Obtain list of subreddits from already downloaded json file
+            # NOTE: Use file present in ALL_SUBREDDITS_JSON (production) or MINIMAL_SUBREDDITS_JSON (for testing)
+            with open(ALL_SUBREDDITS_JSON, 'r') as f:
+                self.contents = json.load(f)
 
         unprocessed_string = self.contents['data']['content_md']
         return self.extract_subreddit_names(unprocessed_string)

@@ -11,3 +11,6 @@ PIPELINE_STATUS_PATH = os.path.join(HOME_DIR, "pipeline_status.txt")
 SUBREDDITS_RANKING_PATH = os.path.join(HOME_DIR, "subreddits_ranking.json")
 
 CONFIG_PATH = os.path.join(HOME_DIR, 'app', 'utils', 'config.ini')
+
+ALL_SUBREDDITS_JSON = os.path.join(HOME_DIR, 'listofsubreddits.json')
+MINIMAL_SUBREDDITS_JSON = os.path.join(HOME_DIR, 'minimal_listofsubreddits.json')
