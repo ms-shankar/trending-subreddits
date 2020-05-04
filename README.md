@@ -1,7 +1,7 @@
 # Trending Subreddits
 
-**Trending Subreddits** is an application that ingests, ranks and tracks top subreddits on Reddit on a daily basis. 
-The entire pipleline is orchestrated using Luigi and the final ranking result is obtained as CSV report and is also stored in PostgreSQL DB.
+**Trending Subreddits** is an application that ingests, ranks and tracks top subreddits of Reddit on a daily basis. 
+The entire pipleline is orchestrated using Luigi. The final ranking result is obtained as a CSV report, which is also stored in PostgreSQL DB.
 
 ## Installation
 
@@ -11,7 +11,7 @@ This section describes the steps that need to be followed for setting up the pro
 
 The pipeline setup can be achieved by running the following simple commands
 
-- Cleanup pre-existing virtual environments named .virtualenv
+- Cleanup pre-existing virtual environments
 ```
 $ make clean
 ```
@@ -22,7 +22,7 @@ $ make setup
 
 ### Database setup
 
-- Run PostgreSQL DB as a container using docker
+- Run PostgreSQL DB as a docker container
 ```
 $ docker run --name trending-subreddits-db -e POSTGRES_PASSWORD=<password> -d -p 5432:5432 postgres
 ```
@@ -44,7 +44,7 @@ CREATE DATABASE db_rankings;
 ```
 - Create a new table to store rankings data
 ```
-$ CREATE TABLE subreddit_rankings (timestamp VARCHAR(20), rank INT, subreddit VARCHAR(50), subreddit_score FLOAT, storage_location VARCHAR(250));
+CREATE TABLE subreddit_rankings (timestamp VARCHAR(20), rank INT, subreddit VARCHAR(50), subreddit_score FLOAT, storage_location VARCHAR(250));
 ```
 
 ## Configuration
@@ -64,7 +64,7 @@ This section describes how to run the unit tests.
 ```
 $ make test
 ```
-**Alternatively**
+** Alternatively
 
 ### Invoke unit tests normally
 ```
