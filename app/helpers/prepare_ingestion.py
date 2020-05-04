@@ -33,7 +33,6 @@ class PrepareIngestion:
 
         # split string to generate words
         words = input_string.split(' ')
-        # print("words", words)
 
         # select only the subreddits names from the file starting with "/r/"
         all_subreddit_handles = [word for word in words if word.startswith("/r/") or word.startswith("\r\n/r/")]

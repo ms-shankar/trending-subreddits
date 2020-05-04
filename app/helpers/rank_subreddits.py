@@ -3,7 +3,6 @@ import glob
 import json
 from collections import OrderedDict
 from operator import itemgetter
-from app.utils.constants import SUBREDDIT_CONTENTS_SAVE_DIR
 
 
 class SubredditsRanking:
