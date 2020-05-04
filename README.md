@@ -82,6 +82,10 @@ $ PYTHONPATH='.' luigi --module tasks_pipeline --local-scheduler PipelineWrapper
 ```
 $ python tasks_pipeline.py PipelineWrappertask
 ```
+### NOTE
+- In order to quickly test the entire pipeline with minimal processing of subreddits, 
+please use the file `minimal_listofsubreddits.json` indicated by the path `MINIMAL_SUBREDDITS_JSON`
+instead of `listofsubreddits.json`, which is indicated by the path `ALL_SUBREDDITS_JSON` in `app/helpers/prepare_ingestion.py`
 
 
 
