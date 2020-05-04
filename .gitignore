@@ -13,6 +13,8 @@ app/helpers/__pycache__/*.pyc
 app/helpers/*.pyc
 app/utils/__pycache__/*.pyc
 app/utils/*.pyc
+tests/__pycache__/
+tests/__pycache__/*.pyc
 *$py.class
 s
 # C extensions
