@@ -23,6 +23,9 @@ class GetAllSubreddits(luigi.Task):
         subreddits_list_save_file_path = derive_subreddits_list_save_path(self.start, self.home_dir)
         return luigi.LocalTarget(subreddits_list_save_file_path)
 
+    def complete(self):
+        return False
+
     def run(self):
 
         # Preparing Ingestion, obtaining all available latest subreddits from r/ListOfSubreddits
@@ -31,3 +34,8 @@ class GetAllSubreddits(luigi.Task):
 
         with self.output().open('w') as f:
             f.write('\n'.join(subreddits_list))
+
+        self.status = "Completed"
+        self.complete = lambda: True
+
+
