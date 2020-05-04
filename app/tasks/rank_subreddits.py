@@ -11,7 +11,7 @@ from app.tasks.ingestion import Ingestion
 
 class RankSubreddits(luigi.Task):
     """
-    Get the ranking of all subreddits based on subreddit score
+    Get the ranking of all subreddits based on the calculated subreddit score
 
     """
     start = luigi.Parameter(default=derive_current_timestamp())

@@ -9,7 +9,7 @@ from app.tasks.ingest_subreddit import IngestSubreddit
 
 class Ingestion(luigi.Task):
     """
-    Ingest the reddit data for each subreddit and each post within that subreddit
+    Ingest the reddit data for all top subreddits and top posts and comments within that subreddit
 
     """
     start = luigi.Parameter(default=derive_current_timestamp())

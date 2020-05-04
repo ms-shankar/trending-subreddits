@@ -8,7 +8,6 @@ from operator import itemgetter
 class SubredditsRanking:
     """
     A helper class for the primary task RankSubreddits, that performs all task specific operations
-
     """
 
     def __init__(self, start_date, dir_path):
@@ -18,7 +17,9 @@ class SubredditsRanking:
         self.sorted_ranking_index = OrderedDict()
 
     def get_ranking_index(self):
-
+        """
+        Generates the subreddit ranking index, an OrderedDict() in the form {"subreddit_name1": "subreddit_score1,..}
+        """
         all_files = os.path.join(self.dir_path, f"*")
         saved_files_list = glob.glob(all_files)
         for subreddit_file in saved_files_list:
@@ -36,6 +37,10 @@ class SubredditsRanking:
                                                        reverse=True))
 
     def get_ranking_data(self):
+        """
+        Generates the final subreddit rankings list
+        :return ranking_data_list: A list of ranked subreddits along with their scores and storage paths
+        """
         ranking_data_list = []
         current_rank = 0
 
@@ -47,6 +52,11 @@ class SubredditsRanking:
         return ranking_data_list
 
     def get_saved_path(self, subreddit):
+        """
+        Derive the storage path of each Subreddit specific json file
+        :param subreddit: The subreddit name
+        :return: Contents storage path of the subreddit name
+        """
         return os.path.join(self.dir_path, f"{subreddit}.json")
 
 

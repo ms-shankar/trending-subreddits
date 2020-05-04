@@ -22,7 +22,7 @@ config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
 
 
-class PipelineWrappertask(luigi.WrapperTask):
+class PipelineWrapperTask(luigi.WrapperTask):
     """
     A wrapper tasks that runs the entire pipeline in a specific order
     :params: Custom parameters can be passed for task start timestamp, top 'n' subreddits, posts and comments if necessary.

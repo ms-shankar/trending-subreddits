@@ -9,7 +9,7 @@ from app.helpers.subreddit_ingestion import SubredditIngestion
 
 class IngestSubreddit(luigi.Task):
     """
-    Task to individually ingest the Subreddit data and store as separate output targets based on save_path param
+    Task to individually ingest the Subreddit data and store as separate output targets
 
     """
     subreddit_name = luigi.Parameter()

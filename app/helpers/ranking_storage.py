@@ -19,10 +19,18 @@ class RankingStorage:
         self.conn = self.get_db_conn()
 
     def get_db_conn(self):
+        """
+        Derive the connection string and supply PostgresDB connection
+        :return conn: Connection to the specified database and table
+        """
         connection_string = f"host={self.host} dbname={self.dbname} user={self.user} password={self.password}"
         return psycopg2.connect(connection_string)
 
     def insert_into_db(self, row):
+        """
+        Insert individual rankings row data into the database rankings table
+        :param row: The ranking associated with each subreddit rank to be inserted into the rankings table
+        """
         cursor = self.conn.cursor()
         cursor.execute("INSERT INTO subreddit_rankings VALUES (%s, %s, %s, %s, %s)",
                        (row[0], row[1], row[2], row[3], row[4]))

@@ -1,7 +1,4 @@
-import urllib
 import json
-import requests
-
 from app.utils.constants import ALL_SUBREDDITS_URL
 
 
@@ -15,6 +12,10 @@ class PrepareIngestion:
         self.contents = None
 
     def fetch_all_subreddits_list(self):
+        """
+        Fetches response containing all subreddits names from subreddit r/ListOfSubreddits
+        :return A list containing all subreddit names
+        """
         # req = urllib.request.Request(self.url)
         # response = urllib.request.urlopen(req)
         # data = response.read()
@@ -29,6 +30,11 @@ class PrepareIngestion:
 
     @staticmethod
     def extract_subreddit_names(input_string):
+        """
+        Extracts all subreddits names as a list from the obtained response from r/ListOfSubreddits
+        :return all_subreddits_list: A list containing all subreddit names
+
+        """
         all_subreddits_list = []
 
         # split string to generate words
@@ -36,7 +42,6 @@ class PrepareIngestion:
 
         # select only the subreddits names from the file starting with "/r/"
         all_subreddit_handles = [word for word in words if word.startswith("/r/") or word.startswith("\r\n/r/")]
-        # print("subreddits", len(all_subreddits))
 
         for subreddit in all_subreddit_handles:
             if '.' in subreddit:

@@ -32,6 +32,11 @@ class SubredditIngestion:
         self.reddit = self.get_api_wrapper()
 
     def get_api_wrapper(self, config_path=CONFIG_PATH):
+        """
+        Fetches Reddit API credentials from config.ini file
+        :param config_path: Path to the stored config file
+        :return: The Reddit PRAW API wrapper instance for the passed API credentials
+        """
         config = configparser.ConfigParser()
         config.read(config_path)
         client_id = config['REDDIT']['client_id']
@@ -47,6 +52,10 @@ class SubredditIngestion:
                            user_agent=user_agent)
 
     def derive_top_data(self):
+        """
+        Derives only the top posts and comments along with their scores for ingestion
+        :return subreddit_contents: Subreddit score and top contents (posts & comments) for each subreddit
+        """
 
         for post in self.reddit.subreddit(self.subreddit_name).top(limit=None):
 
@@ -102,8 +111,6 @@ class SubredditIngestion:
             self.subreddit_score = self.subreddit_score/self.total_posts
         except ZeroDivisionError:
             self.subreddit_score = 0
-
-        print("--------------self.top_n_posts---------------", self.top_n_posts)
 
         # Obtain only top n posts and save the data
         # Handle insufficient number of posts case:
