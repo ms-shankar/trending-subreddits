@@ -64,7 +64,7 @@ This section describes how to run the unit tests.
 ```
 $ make test
 ```
-***Alternatively***
+***Alternately***
 
 ### Invoke unit tests normally
 ```
