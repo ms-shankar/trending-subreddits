@@ -16,7 +16,7 @@ app/utils/*.pyc
 tests/__pycache__/
 tests/__pycache__/*.pyc
 *$py.class
-s
+
 # C extensions
 *.so
 
